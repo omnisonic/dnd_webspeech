@@ -2,21 +2,76 @@
 <html>
 <head>
     <title>D&D 5e Spellbook</title>
+        <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .bg-image {
+            /* The image used */
+            background-image: url("bg-image.jpeg");
+
+            /* Full height */
+            height: 100%;
+                /* Background image does not scroll */
+            background-attachment: fixed;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .text-container {
+            /* Positioning and styling for the text container */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: left;
+            font-size: 0.75em;
+
+            /* Making the background slightly transparent */
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+            padding: 20px;
+            border-radius: 10px;
+                max-height: 300px; /* Maximum height of the container */
+            overflow: auto; /* Adds scrollbars when content exceeds max-height */
+            width: 600px; /* Set a fixed width, or adjust as needed */
+        }
+        header {
+        color: white;
+        text-align: center;
+            /* Making the background slightly transparent */
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+            padding: 20px;
+            border-radius: 10px;
+    }
+    </style>
 </head>
-<body>
-    <h1>Welcome to the D&D 5e Spellbook! vsc git test<h1>
-    <div id="totalSpells"></div>
+<body class="bg-image">
+
+    <header> 
+<h1>Welcome to the D&D 5e Spellbook! <h1>
+
     <div>
         <button id="listSpells">List all spells</button>
         <button id="searchSpell">Search for a spell by name</button>
         <button id="exit">Exit</button>
-    </div>
-        <div id="searchSection" style="display:none;">
-        <input type="text" id="spellName" placeholder="Enter the spell name">
+                  <div id="searchSection" style="display:none;">
+
         <button id="findSpell">Find Spell</button>
+        <input type="text" id="spellName" placeholder="Enter the spell name">
     </div>
-    <div id="spellDetails"></div>
+    <div class="text-container">    
+          <div id="totalSpells"></div>
     <div id="spellList"></div>
+    <div id="spellDetails"></div>
+    </div>
+          </header>
 
 
     <script>
@@ -104,5 +159,7 @@
             // Additional exit logic can be implemented here
         }
     </script>
+      </div>
+
 </body>
 </html>
