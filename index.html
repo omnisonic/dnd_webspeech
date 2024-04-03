@@ -1,170 +1,104 @@
 <!DOCTYPE html>
-<html>
 
 <head>
-    <title>D&D 5e Spellbook</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <title>D&amp;D 5e Spellbook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            font-size: medium;
-        }
+        p {
 
-        .bg-image {
-            /* The image used */
+    line-height: 2;
+
+}
+
+        body {
             background-image: url("bg-image.jpeg");
-
-            /* Full height */
-            height: 100%;
-            /* Background image does not scroll */
             background-attachment: fixed;
-
-            /* Center and scale the image nicely */
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+            font-family: Arial, sans-serif;
         }
 
         .container {
-            /* Positioning and styling for the text container */
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: left;
-            font-size: 1.5em;
-
-
-            /* Black background with opacity */
-            padding: 10px;
-            margin-top: 40px;
-            border-radius: 10px;
-            max-height: fit-content;
-            /* Maximum height of the container */
-            /* overflow: auto;
-            /* Adds scrollbars when content exceeds max-height */
-            /* width: auto; */
-            /* Set a fixed width, or adjust as needed */
-        }
-
-        header {
-            color: white;
-            text-align: center;
-            /* Making the background slightly transparent */
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Black background with opacity */
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        #spellDetails {
-            /* Making the background slightly transparent */
             background-color: rgba(0, 0, 0, 0.7);
-            overflow: auto;
-            height: 20em;
-            width: fit-content;
-            padding: auto;
-
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
         }
 
-        .col-md-4 {
-            /* Making the background slightly transparent */
-            background-color: rgba(0, 0, 0, 0.7);
-            overflow: auto;
-            height: 20em;
-            width: fit-content;
+        .spell-list {
+            max-height: 200px;
+            overflow-y: auto;
         }
 
-        p {
-
-            margin: 20px;
+        .spell-details {
+            max-height: 400px;
+            overflow-y: auto;
         }
     </style>
 </head>
 
-<body class="bg-image">
+<body>
 
-    <header>
-        <h1>Welcome to the D&D 5e Spellbook! <h1>
-
-                <div>
-                    <!-- <button id="listSpells">List all spells</button> -->
-                    <!-- <button id="searchSpell">Search for a spell by name</button> -->
-                    <div id="searchSection">
-
-                        <button id="findSpellByName">Find Spell</button>
-                        <input type="text" id="spellName" placeholder="Enter the spell name">
-
-                    </div>
-                </div>
-
-    </header>
     <div class="container">
-
-        <div id="totalSpells"></div>
-
-
+        <h1 class="text-center mb-4">D&D 5e Spellbook</h1>
         <div class="row">
-            <!-- Left column for spell list -->
             <div class="col-md-4">
-                <h3>Search Results</h3>
-                <div id="spellNameSearchResult"></div>
-                <h2>Spell List</h2>
-
-                <div id="spellList">
-
-                    <!-- Spell list will be displayed here -->
+                <div class="mb-3">
+                    <input type="text" id="spellName" class="form-control" placeholder="Enter spell name">
+                    <button id="findSpellByName" class="btn btn-primary mt-2">Find Spell</button>
                 </div>
+                <div class="mb-3">
+                    <button id="listAllSpellsBtn" class="btn btn-secondary">List All Spells</button>
+                </div>
+                <h3>Spell List</h3>
+                <div id="spellList" class="spell-list"></div>
             </div>
-
-            <!-- Right column for spell details -->
             <div class="col-md-8">
-
-                <h2>Spell Details</h2>
-                <!-- Add the Play button -->
-                <button id="playButton">Speak Text Aloud</button>
-
-                <!-- Add the Stop button -->
-                <button id="stopButton">Stop Audio</button>
-
-                <div id="spellDetails">
-                    <!-- Spell details will be displayed here -->
+                <h3>Spell Details</h3>
+                <div class="mb-3">
+                    <button id="playButton" class="btn btn-success">Speak Text Aloud</button>
+                    <button id="stopButton" class="btn btn-danger">Stop Audio</button>
                 </div>
+                <div id="spellDetails" class="spell-details"></div>
             </div>
         </div>
+        <div id="totalSpells" class="text-center mt-3"></div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // document.getElementById('listSpells').addEventListener('click', listAllSpells);
-            // document.getElementById('searchSpell').addEventListener('click', showSearch);
-            document.getElementById('findSpellByName').addEventListener('click', findSpellByName);
-            // Add event listener for the Play button
-            document.getElementById('playButton').addEventListener('click', playSpellDetails);
+            document.getElementById('findSpellByName').addEventListener(
+                'click', findSpellByName);
+            document.getElementById('playButton').addEventListener(
+                'click', playSpellDetails);
 
-            // Add event listener for the Stop button
-            document.getElementById('stopButton').addEventListener('click', stopSpeech);
+            document.getElementById('stopButton').addEventListener(
+                'click', stopSpeech);
+
+            document.getElementById('listAllSpellsBtn').addEventListener(
+                'click', listAllSpells);
+
+
             // Fetch the total number of spells on initial load
+
             fetch(baseApiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('totalSpells').innerText = `Total Spells: ${data.count}`;
+                    document.getElementById('totalSpells').innerText =
+                        `Total Spells: ${data.count}`;
                 })
                 .catch(error => console.error('Error:', error));
         });
 
         const baseApiUrl = "https://www.dnd5eapi.co/api/spells";
+
         let spells = [];
+
         let searchResults = []; // Array for search results
 
         function fetchSpellDetails(url) {
-            const fullUrl = `https://www.dnd5eapi.co${url}`;  // Ensure full URL is constructed
+            const fullUrl = `https://www.dnd5eapi.co${url}`; // Ensure full URL is constructed
             return fetch(fullUrl)
                 .then(response => response.json())
                 .catch(error => console.error('Error:', error));
@@ -174,7 +108,8 @@
             if ('speechSynthesis' in window) {
                 let utterance = new SpeechSynthesisUtterance(text);
                 window.speechSynthesis.speak(utterance);
-            } else {
+            }
+            else {
                 console.log('Your browser does not support speech synthesis.');
             }
         }
@@ -184,50 +119,52 @@
                 .then(response => response.json())
                 .then(data => {
                     spells = data.results;
-                    let spellListHtml = '<ul>';
+                    let spellListHtml = '<ul class="list-group">';
                     spells.forEach((spell, index) => {
-                        spellListHtml += `<li>${index + 1}. ${spell.name}</li>`;
+                        spellListHtml +=
+                            `<li class="list-group-item">${index + 1}. ${spell.name} <button class="btn btn-sm btn-primary float-end" onclick="viewSpellDetails('${spell.url}')">View Details</button></li>`;
+
                     });
                     spellListHtml += '</ul>';
-                    document.getElementById('spellList').innerHTML = spellListHtml;
+                    document.getElementById('spellList').innerHTML =
+                        spellListHtml;
                 })
                 .catch(error => console.error('Error:', error));
-        }
-        listAllSpells()
-
-
-        function showSearch() {
-            document.getElementById('searchSection').style.display = 'block';
         }
 
         function findSpellByName() {
             const spellName = document.getElementById('spellName').value.toLowerCase();
-            searchResults = spells.filter(spell => spell.name.toLowerCase().includes(spellName));
+            searchResults = spells.filter(spell => spell.name.toLowerCase().includes(
+                spellName));
             if (spellName === '') {
                 console.log("Please enter a spell name.");
-                document.getElementById('spellNameSearchResult').innerHTML = '<p>Please enter a spell name.</p>';
+                document.getElementById('spellList').innerHTML =
+                    '<p>Please enter a spell name.</p>';
                 return;
             }
             if (searchResults.length === 0) {
                 console.log("No matching spells found.");
-                document.getElementById('spellNameSearchResult').innerHTML = '<p>No matching spells found.</p>';
+                document.getElementById('spellList').innerHTML =
+                    '<p>No matching spells found.</p>';
                 return;
             }
 
-            let spellListHtml = '<ul>';
+            let spellListHtml = '<ul class="list-group">';
             searchResults.forEach((spell, index) => {
-                spellListHtml += `<li>${index + 1}. ${spell.name} - <button onclick="viewSpellDetails('${spell.url}')">View Details</button></li>`;
+                spellListHtml +=
+                    `<li class="list-group-item">${index + 1}. ${spell.name} <button class="btn btn-sm btn-primary float-end" onclick="viewSpellDetails('${spell.url}')">View Details</button></li>`;
             });
             spellListHtml += '</ul>';
-            document.getElementById('spellNameSearchResult').innerHTML = spellListHtml;
+            document.getElementById('spellList').innerHTML = spellListHtml;
         }
-
 
         function viewSpellDetails(url) {
             fetchSpellDetails(url)
                 .then(spellDetails => {
-                    let detailsHtml = `<h2>${spellDetails.name}</h2><p>${spellDetails.desc.join(' ')}</p>`;
-                    document.getElementById('spellDetails').innerHTML = detailsHtml;
+                    let detailsHtml =
+                        `<h2>${spellDetails.name}</h2><p>${spellDetails.desc.join(' ')}</p>`;
+                    document.getElementById('spellDetails').innerHTML =
+                        detailsHtml;
                 });
         }
 
@@ -236,16 +173,13 @@
             const textToSpeak = document.getElementById('spellDetails').innerText;
             speak(textToSpeak);
         }
+
         function stopSpeech() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel(); // Stops speech synthesis
             }
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
-</html>
